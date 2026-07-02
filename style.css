@@ -1430,3 +1430,188 @@ footer{
         padding:0 0 14px;
     }
 }
+
+
+/* =========================================
+   AUTH & ADMIN PAGES
+========================================= */
+
+.auth-page{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 20px;
+    background:var(--soft);
+}
+
+.auth-card{
+    width:100%;
+    max-width:430px;
+    background:#fff;
+    padding:40px;
+    border-radius:16px;
+    box-shadow:var(--shadow);
+}
+
+.auth-logo{
+    display:inline-block;
+    margin-bottom:25px;
+}
+
+.auth-card h1{
+    font-family:Georgia,serif;
+    font-size:38px;
+    margin-bottom:10px;
+}
+
+.auth-note{
+    color:var(--muted);
+    margin-bottom:24px;
+}
+
+.auth-form,
+.admin-card{
+    display:grid;
+    gap:16px;
+}
+
+.auth-form label,
+.admin-card label{
+    display:grid;
+    gap:7px;
+    font-weight:bold;
+}
+
+.auth-form input,
+.admin-card input,
+.admin-card select,
+.admin-card textarea{
+    width:100%;
+    padding:13px 14px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    font:inherit;
+}
+
+.form-message{
+    color:var(--brand);
+    font-weight:bold;
+}
+
+.back-link{
+    display:inline-block;
+    margin-top:20px;
+    color:var(--brand);
+    font-weight:bold;
+}
+
+.admin-hero{
+    padding:60px 7%;
+    background:var(--soft);
+}
+
+.admin-hero h1{
+    font-family:Georgia,serif;
+    font-size:44px;
+}
+
+.admin-layout{
+    padding:60px 7%;
+    display:grid;
+    grid-template-columns:minmax(300px, 420px) 1fr;
+    gap:30px;
+    align-items:start;
+}
+
+.admin-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:28px;
+    box-shadow:var(--shadow);
+}
+
+.admin-card h2{
+    font-family:Georgia,serif;
+    margin-bottom:10px;
+}
+
+.admin-actions{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.admin-product-list{
+    display:grid;
+    gap:16px;
+}
+
+.admin-product-row{
+    display:grid;
+    grid-template-columns:90px 1fr auto;
+    gap:16px;
+    align-items:center;
+    padding:14px;
+    border:1px solid var(--border);
+    border-radius:10px;
+}
+
+.admin-product-row img{
+    width:90px;
+    height:90px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+.admin-product-row h3{
+    margin-bottom:4px;
+}
+
+.admin-product-row p{
+    color:var(--muted);
+}
+
+.admin-row-actions{
+    display:flex;
+    gap:8px;
+}
+
+.admin-row-actions button{
+    padding:9px 12px;
+    border:1px solid var(--border);
+    background:#fff;
+    cursor:pointer;
+    border-radius:4px;
+    font-weight:bold;
+}
+
+.admin-row-actions button:hover{
+    color:var(--brand);
+    border-color:var(--brand);
+}
+
+@media(max-width:900px){
+    .admin-layout{
+        grid-template-columns:1fr;
+        padding:45px 5%;
+    }
+
+    .admin-hero{
+        padding:50px 5%;
+    }
+
+    .admin-product-row{
+        grid-template-columns:70px 1fr;
+    }
+
+    .admin-product-row img{
+        width:70px;
+        height:70px;
+    }
+
+    .admin-row-actions{
+        grid-column:1 / -1;
+    }
+}
