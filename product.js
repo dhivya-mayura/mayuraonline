@@ -2,167 +2,74 @@
 // Product Details Page
 // ================================
 
-// Get product ID from URL
-const params = new URLSearchParams(window.location.search);
-const productId = Number(params.get("id"));
+document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const productId = Number(params.get("id"));
+    const product = products.find(item => item.id === productId);
 
-// Find selected product
-const product = products.find(p => p.id === productId);
+    if (!product) {
+        document.querySelector("main").innerHTML = `
+            <section class="section">
+                <h1>Product Not Found</h1>
+                <p>The product you are looking for does not exist.</p>
+                <br>
+                <a href="products.html" class="btn primary">Back to Products</a>
+            </section>
+        `;
+        return;
+    }
 
-// Redirect if product not found
-if (!product) {
-    document.body.innerHTML = `
-        <section class="section">
-            <h2>Product Not Found</h2>
-            <p>The product you are looking for does not exist.</p>
-            <br>
-            <a href="products.html" class="btn primary">
-                Back to Products
-            </a>
-        </section>
-    `;
-    throw new Error("Product not found");
-}
+    document.title = `${product.name} | Style Haven`;
 
-// ================================
-// Populate Product Details
-// ================================
+    setText("breadcrumbName", product.name);
+    setText("productCategory", product.category);
+    setText("productName", product.name);
+    setText("productPrice", product.price);
+    setText("productDescription", product.description);
+    setText("productFabric", product.fabric);
 
-document.getElementById("breadcrumbName").textContent = product.name;
+    const productImage = document.getElementById("productImage");
+    if (productImage) {
+        productImage.src = product.image;
+        productImage.alt = product.name;
+    }
 
-document.getElementById("productImage").src = product.image;
-document.getElementById("productImage").alt = product.name;
+    const sizeContainer = document.getElementById("sizeContainer");
+    if (sizeContainer) {
+        sizeContainer.innerHTML = product.sizes
+            .map(size => `<span class="size-badge">${size}</span>`)
+            .join("");
+    }
 
-document.getElementById("productCategory").textContent = product.category;
+    const colorContainer = document.getElementById("colorContainer");
+    if (colorContainer) {
+        colorContainer.innerHTML = product.colors
+            .map(color => `<span class="color-badge">${color}</span>`)
+            .join("");
+    }
 
-document.getElementById("productName").textContent = product.name;
+    const orderBtn = document.getElementById("orderBtn");
+    if (orderBtn) {
+        orderBtn.href = getWhatsAppOrderLink(product);
+    }
 
-document.getElementById("productPrice").textContent = product.price;
-
-document.getElementById("productDescription").textContent =
-    product.description;
-
-document.getElementById("productFabric").textContent =
-    product.fabric;
-
-
-// ================================
-// Sizes
-// ================================
-
-const sizeContainer = document.getElementById("sizeContainer");
-
-sizeContainer.innerHTML = "";
-
-product.sizes.forEach(size => {
-
-    sizeContainer.innerHTML += `
-        <span class="size-badge">
-            ${size}
-        </span>
-    `;
-
+    renderRelatedProducts(product);
 });
 
-
-// ================================
-// Colors
-// ================================
-
-const colorContainer = document.getElementById("colorContainer");
-
-colorContainer.innerHTML = "";
-
-product.colors.forEach(color => {
-
-    colorContainer.innerHTML += `
-        <span class="color-badge">
-            ${color}
-        </span>
-    `;
-
-});
-
-
-// ================================
-// WhatsApp Button
-// ================================
-
-const phoneNumber = "919999999999"; // Replace with your number
-
-const message = `Hi,
-
-I would like to order:
-
-Product: ${product.name}
-Price: ${product.price}
-
-Please let me know the available sizes and delivery details.
-
-Thank you.`;
-
-document.getElementById("orderBtn").href =
-`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-
-
-// ================================
-// Related Products
-// ================================
-
-const relatedProducts = document.getElementById("relatedProducts");
-
-const related = products.filter(item =>
-
-    item.category === product.category &&
-    item.id !== product.id
-
-);
-
-if (related.length === 0) {
-
-    relatedProducts.innerHTML = `
-        <p>No related products available.</p>
-    `;
-
+function setText(id, value) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value;
 }
-else {
 
-    relatedProducts.innerHTML = related.map(item => `
+function renderRelatedProducts(currentProduct) {
+    const relatedProducts = document.getElementById("relatedProducts");
+    if (!relatedProducts) return;
 
-        <article class="product-card">
+    const related = products
+        .filter(item => item.category === currentProduct.category && item.id !== currentProduct.id)
+        .slice(0, 4);
 
-            <a href="product.html?id=${item.id}">
-
-                <img
-                    src="${item.image}"
-                    alt="${item.name}"
-                >
-
-            </a>
-
-            <div class="product-info">
-
-                <p>${item.category}</p>
-
-                <h3>${item.name}</h3>
-
-                <span class="price">
-                    ${item.price}
-                </span>
-
-                <br><br>
-
-                <a
-                    href="product.html?id=${item.id}"
-                    class="order-link"
-                >
-                    View Details
-                </a>
-
-            </div>
-
-        </article>
-
-    `).join("");
-
+    relatedProducts.innerHTML = related.length
+        ? related.map(productCard).join("")
+        : `<p class="empty-state">No related products available.</p>`;
 }

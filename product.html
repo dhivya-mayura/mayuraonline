@@ -4,173 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Details | Style Haven</title>
-
+    <meta name="description" content="View product details, available sizes, colors, fabric, and order from Style Haven through WhatsApp.">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Top Bar -->
     <div class="top-bar">
         Free Shipping on Selected Orders | Cash on Delivery Available
     </div>
 
-    <!-- Navbar -->
     <header class="navbar">
-
-        <a href="index.html" class="logo">
+        <a href="index.html" class="logo" aria-label="Style Haven Home">
             STYLE <span>HAVEN</span>
         </a>
 
-        <nav id="navMenu">
+        <nav id="navMenu" aria-label="Main navigation">
             <a href="index.html">Home</a>
-            <a href="products.html">Products</a>
+            <a href="products.html" class="active">Products</a>
             <a href="index.html#collections">Collections</a>
             <a href="index.html#about">About</a>
             <a href="index.html#contact">Contact</a>
         </nav>
 
-        <button id="menuBtn" class="menu-btn">
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
             ☰
         </button>
-
     </header>
 
-    <!-- Breadcrumb -->
+    <main>
+        <section class="breadcrumb" aria-label="Breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <a href="products.html">Products</a>
+            <span>/</span>
+            <span id="breadcrumbName">Product</span>
+        </section>
 
-    <section class="breadcrumb">
-
-        <a href="index.html">Home</a>
-
-        /
-
-        <a href="products.html">Products</a>
-
-        /
-
-        <span id="breadcrumbName">Product</span>
-
-    </section>
-
-    <!-- Product Details -->
-
-    <section class="product-details">
-
-        <!-- Image -->
-
-        <div class="product-gallery">
-
-            <img
-                id="productImage"
-                src=""
-                alt="Product Image">
-
-        </div>
-
-        <!-- Details -->
-
-        <div class="product-content">
-
-            <span
-                class="category-badge"
-                id="productCategory">
-            </span>
-
-            <h1 id="productName"></h1>
-
-            <span
-                class="price"
-                id="productPrice">
-            </span>
-
-            <p id="productDescription"></p>
-
-            <hr>
-
-            <div class="info-row">
-
-                <strong>Fabric :</strong>
-
-                <span id="productFabric"></span>
-
+        <section class="product-details">
+            <div class="product-gallery">
+                <img id="productImage" src="" alt="Selected product image">
             </div>
 
-            <div class="info-row">
+            <div class="product-content">
+                <span class="category-badge" id="productCategory"></span>
 
-                <strong>Availability :</strong>
+                <h1 id="productName"></h1>
 
-                <span class="stock">
-                    In Stock
-                </span>
+                <span class="price detail-price" id="productPrice"></span>
 
+                <p id="productDescription"></p>
+
+                <hr>
+
+                <div class="info-row">
+                    <strong>Fabric:</strong>
+                    <span id="productFabric"></span>
+                </div>
+
+                <div class="info-row">
+                    <strong>Availability:</strong>
+                    <span class="stock">In Stock</span>
+                </div>
+
+                <div class="sizes">
+                    <h3>Available Sizes</h3>
+                    <div id="sizeContainer"></div>
+                </div>
+
+                <div class="colors">
+                    <h3>Available Colors</h3>
+                    <div id="colorContainer"></div>
+                </div>
+
+                <a href="#" id="orderBtn" class="btn primary" target="_blank" rel="noopener">
+                    Order on WhatsApp
+                </a>
             </div>
+        </section>
 
-            <!-- Sizes -->
-
-            <div class="sizes">
-
-                <h3>Available Sizes</h3>
-
-                <div id="sizeContainer"></div>
-
-            </div>
-
-            <!-- Colors -->
-
-            <div class="colors">
-
-                <h3>Available Colors</h3>
-
-                <div id="colorContainer"></div>
-
-            </div>
-
-            <br>
-
-            <a
-                href="#"
-                id="orderBtn"
-                class="btn primary"
-                target="_blank">
-                Order on WhatsApp
-            </a>
-
-        </div>
-
-    </section>
-
-    <!-- Related Products -->
-
-    <section class="section light">
-
-        <p class="section-label">
-            Similar Products
-        </p>
-
-        <h2>
-            You May Also Like
-        </h2>
-
-        <div
-            class="product-grid"
-            id="relatedProducts">
-        </div>
-
-    </section>
-
-    <!-- Footer -->
+        <section class="section light">
+            <p class="section-label">Similar Products</p>
+            <h2>You May Also Like</h2>
+            <div class="product-grid" id="relatedProducts"></div>
+        </section>
+    </main>
 
     <footer>
-
-        <p>
-            © 2026 Style Haven. All rights reserved.
-        </p>
-
+        <p>© 2026 Style Haven. All rights reserved.</p>
     </footer>
-
-    <!-- JavaScript -->
 
     <script src="script.js"></script>
     <script src="product.js"></script>
-
 </body>
 </html>
