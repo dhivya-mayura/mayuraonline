@@ -108,6 +108,8 @@ document.addEventListener("DOMContentLoaded", () => {
     setupWhatsAppContact();
     renderHomeArrivals();
     renderProductsPage();
+    renderWishlistPage();
+    updateWishlistCount();
 });
 
 function setupMobileMenu() {
@@ -141,8 +143,19 @@ function setupWhatsAppContact() {
 }
 
 function productCard(product) {
+    const wished = isWishlisted(product.id);
+    const heart = wished ? "♥" : "♡";
+    const label = wished ? "Remove from wishlist" : "Add to wishlist";
+
     return `
         <article class="product-card">
+            <button
+                class="wishlist-btn ${wished ? "active" : ""}"
+                data-product-id="${product.id}"
+                aria-label="${label}">
+                ${heart}
+            </button>
+
             <a href="product.html?id=${product.id}" aria-label="View ${product.name}">
                 <img src="${product.image}" alt="${product.name}">
             </a>
@@ -216,3 +229,130 @@ function renderProductsPage() {
 
     render(selectedCategory);
 }
+
+// ================================
+// Wishlist
+// ================================
+
+function getWishlist() {
+    return JSON.parse(localStorage.getItem("styleHavenWishlist") || "[]");
+}
+
+function saveWishlist(ids) {
+    localStorage.setItem("styleHavenWishlist", JSON.stringify(ids));
+    updateWishlistCount();
+}
+
+function isWishlisted(productId) {
+    return getWishlist().includes(Number(productId));
+}
+
+function toggleWishlist(productId) {
+    productId = Number(productId);
+    const wishlist = getWishlist();
+
+    if (wishlist.includes(productId)) {
+        saveWishlist(wishlist.filter(id => id !== productId));
+    } else {
+        saveWishlist([...wishlist, productId]);
+    }
+
+    refreshWishlistButtons();
+    renderWishlistPage();
+}
+
+function updateWishlistCount() {
+    const count = getWishlist().length;
+    document.querySelectorAll("#wishlistCount").forEach(element => {
+        element.textContent = count;
+    });
+}
+
+function refreshWishlistButtons() {
+    document.querySelectorAll(".wishlist-btn").forEach(button => {
+        const productId = Number(button.dataset.productId);
+        const wished = isWishlisted(productId);
+
+        button.classList.toggle("active", wished);
+        button.textContent = wished ? "♥" : "♡";
+        button.setAttribute("aria-label", wished ? "Remove from wishlist" : "Add to wishlist");
+    });
+}
+
+document.addEventListener("click", event => {
+    const wishlistButton = event.target.closest(".wishlist-btn");
+    if (!wishlistButton) return;
+
+    event.preventDefault();
+    toggleWishlist(wishlistButton.dataset.productId);
+});
+
+function renderWishlistPage() {
+    const wishlistGrid = document.getElementById("wishlistGrid");
+    if (!wishlistGrid) return;
+
+    const wishlistIds = getWishlist();
+    const wishlistProducts = products.filter(product => wishlistIds.includes(product.id));
+
+    wishlistGrid.innerHTML = wishlistProducts.length
+        ? wishlistProducts.map(wishlistItem).join("")
+        : `
+            <div class="premium-empty-wishlist">
+                <div class="empty-heart">♡</div>
+                <h2>Your wishlist is empty</h2>
+                <p>Save your favorite products by clicking the heart icon on any product.</p>
+                <a href="products.html" class="btn primary">Explore Products</a>
+            </div>
+        `;
+
+    const clearBtn = document.getElementById("clearWishlistBtn");
+    if (clearBtn) {
+        clearBtn.style.display = wishlistProducts.length ? "inline-flex" : "none";
+    }
+}
+
+function wishlistItem(product) {
+    return `
+        <article class="wishlist-item">
+            <a class="wishlist-image" href="product.html?id=${product.id}" aria-label="View ${product.name}">
+                <img src="${product.image}" alt="${product.name}">
+            </a>
+
+            <div class="wishlist-details">
+                <p class="product-category">${product.category}</p>
+                <a class="product-link" href="product.html?id=${product.id}">
+                    <h3>${product.name}</h3>
+                </a>
+                <p>${product.short}</p>
+
+                <div class="wishlist-meta">
+                    <span class="price">${product.price}</span>
+                    <span>Fabric: ${product.fabric}</span>
+                </div>
+
+                <div class="wishlist-actions">
+                    <a href="product.html?id=${product.id}" class="btn secondary">View Details</a>
+                    <a href="${getWhatsAppOrderLink(product)}" class="order-link" target="_blank" rel="noopener">Order on WhatsApp</a>
+                    <button class="remove-wishlist-btn" data-product-id="${product.id}" type="button">
+                        Remove
+                    </button>
+                </div>
+            </div>
+        </article>
+    `;
+}
+
+document.addEventListener("click", event => {
+    const removeButton = event.target.closest(".remove-wishlist-btn");
+    if (removeButton) {
+        event.preventDefault();
+        toggleWishlist(removeButton.dataset.productId);
+    }
+
+    const clearButton = event.target.closest("#clearWishlistBtn");
+    if (clearButton) {
+        saveWishlist([]);
+        renderWishlistPage();
+        refreshWishlistButtons();
+    }
+});
