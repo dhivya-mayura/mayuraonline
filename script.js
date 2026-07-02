@@ -2,7 +2,7 @@
 // Style Haven Main Script
 // ================================
 
-const STORE_PHONE_NUMBER = "919999999999"; // Replace with your real WhatsApp number.
+const STORE_PHONE_NUMBER = "919940621883"; // Replace with your real WhatsApp number.
 
 const products = [
     {
